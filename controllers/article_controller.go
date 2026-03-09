@@ -150,6 +150,44 @@ WHERE author_id=$1
 
 }
 
+func DeleteArticle(c *gin.Context) {
+
+	id := c.Param("id")
+
+	userID, _ := c.Get("user_id")
+
+	query := `
+	DELETE FROM articles
+	WHERE id=$1 AND author_id=$2
+	`
+
+	result, err := config.DB.Exec(query, id, userID)
+
+	if err != nil {
+
+		c.JSON(500, gin.H{
+			"error": "Could not delete article",
+		})
+
+		return
+	}
+
+	rowsAffected, _ := result.RowsAffected()
+
+	if rowsAffected == 0 {
+
+		c.JSON(403, gin.H{
+			"error": "You are not allowed to delete this article",
+		})
+
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Article deleted successfully",
+	})
+}
+
 func generateSlug(title string) string {
 
 	slug := strings.ToLower(title)
