@@ -39,3 +39,42 @@ func GetAuthor(c *gin.Context) {
 
 	c.JSON(200, response)
 }
+
+func DeleteUser(c *gin.Context) {
+
+	userID, _ := c.Get("user_id")
+
+	// delete user's articles first
+	_, err := config.DB.Exec(
+		"DELETE FROM articles WHERE author_id=$1",
+		userID,
+	)
+
+	if err != nil {
+
+		c.JSON(500, gin.H{
+			"error": "Could not delete user articles",
+		})
+
+		return
+	}
+
+	// delete user
+	_, err = config.DB.Exec(
+		"DELETE FROM users WHERE id=$1",
+		userID,
+	)
+
+	if err != nil {
+
+		c.JSON(500, gin.H{
+			"error": "Could not delete user",
+		})
+
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "User deleted successfully",
+	})
+}
