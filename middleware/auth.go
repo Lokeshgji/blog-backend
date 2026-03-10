@@ -9,7 +9,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-var jwtSecret = []byte("secret")
+var jwtSecret = []byte("9f94493f-945b-4326-9801-829696eda26e")
 
 func AuthMiddleware() gin.HandlerFunc {
 
