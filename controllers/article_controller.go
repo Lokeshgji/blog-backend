@@ -188,6 +188,53 @@ func DeleteArticle(c *gin.Context) {
 	})
 }
 
+func UpdateArticle(c *gin.Context) {
+
+	id := c.Param("id")
+
+	userID, _ := c.Get("user_id")
+
+	var article models.Article
+
+	err := c.BindJSON(&article)
+
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Invalid request"})
+		return
+	}
+
+	query := `
+	UPDATE articles
+	SET title=$1, content=$2
+	WHERE id=$3 AND author_id=$4
+	`
+
+	result, err := config.DB.Exec(
+		query,
+		article.Title,
+		article.Content,
+		id,
+		userID,
+	)
+
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Could not update article"})
+		return
+	}
+
+	rows, _ := result.RowsAffected()
+
+	if rows == 0 {
+		c.JSON(403, gin.H{"error": "Not authorized"})
+		return
+	}
+
+	c.JSON(200, gin.H{
+		"message": "Article updated successfully",
+	})
+
+}
+
 func generateSlug(title string) string {
 
 	slug := strings.ToLower(title)
