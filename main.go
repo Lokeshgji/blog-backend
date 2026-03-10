@@ -3,6 +3,7 @@ package main
 import (
 	"blog-platform/config"
 	"blog-platform/routes"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
@@ -26,5 +27,11 @@ func main() {
 
 	routes.RegisterRoutes(r)
 
-	r.Run(":8080")
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8080"
+	}
+
+	r.Run(":" + port)
 }

@@ -148,7 +148,7 @@ func Login(c *gin.Context) {
 		"exp":     time.Now().Add(24 * time.Hour).Unix(),
 	})
 
-	tokenString, err := token.SignedString([]byte("secret"))
+	tokenString, err := token.SignedString([]byte("9f94493f-945b-4326-9801-829696eda26e"))
 
 	if err != nil {
 		c.JSON(500, gin.H{
