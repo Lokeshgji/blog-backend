@@ -11,7 +11,7 @@ var DB *sqlx.DB
 
 func ConnectDB() {
 
-	dsn := "user=postgres password=postgres dbname=blog sslmode=disable"
+	dsn := "postgresql://postgres:%40zerologic51295%23@db.yugaprmiwjxrpiwekotz.supabase.co:5432/postgres?sslmode=require"
 
 	db, err := sqlx.Connect("postgres", dsn)
 
