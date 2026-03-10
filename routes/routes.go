@@ -17,6 +17,7 @@ func RegisterRoutes(r *gin.Engine) {
 	r.GET("/authors/:id/articles", controllers.GetArticlesByAuthor)
 	r.DELETE("/articles/:id", middleware.AuthMiddleware(), controllers.DeleteArticle)
 	r.DELETE("/users/me", middleware.AuthMiddleware(), controllers.DeleteUser)
+	r.PUT("/articles/:id", middleware.AuthMiddleware(), controllers.UpdateArticle)
 
 	// Protected routes
 	auth := r.Group("/")

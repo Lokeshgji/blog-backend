@@ -5,6 +5,7 @@ import (
 	"blog-platform/models"
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
@@ -144,17 +145,19 @@ func Login(c *gin.Context) {
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
+		"exp":     time.Now().Add(24 * time.Hour).Unix(),
 	})
 
 	tokenString, err := token.SignedString([]byte("secret"))
 
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Could not generate token"})
+		c.JSON(500, gin.H{
+			"error": "Could not generate token",
+		})
 		return
 	}
 
 	c.JSON(200, gin.H{
 		"token": tokenString,
-		"user":  user,
 	})
 }
